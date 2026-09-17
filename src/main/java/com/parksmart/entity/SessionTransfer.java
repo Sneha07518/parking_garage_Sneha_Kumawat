@@ -1,0 +1,6 @@
+package com.parksmart.entity;
+import java.time.Instant; import jakarta.persistence.*;
+@Entity @Table(name="session_transfer") public class SessionTransfer {
+ @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id; @ManyToOne(optional=false,fetch=FetchType.LAZY) private ParkingSession session; @Column(nullable=false) private String fromPlate; @Column(nullable=false) private String toPlate; private String reason; @Column(nullable=false) private Instant transferredAt; @ManyToOne(fetch=FetchType.LAZY) private User attendant;
+ public SessionTransfer(){} public SessionTransfer(ParkingSession s,String from,String to,String reason,Instant at,User user){session=s;fromPlate=from;toPlate=to;this.reason=reason;transferredAt=at;attendant=user;} public Long getId(){return id;} public ParkingSession getSession(){return session;} public String getFromPlate(){return fromPlate;} public String getToPlate(){return toPlate;} public String getReason(){return reason;} public Instant getTransferredAt(){return transferredAt;} public User getAttendant(){return attendant;}
+}

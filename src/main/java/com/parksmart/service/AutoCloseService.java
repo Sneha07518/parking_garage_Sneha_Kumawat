@@ -1,0 +1,10 @@
+package com.parksmart.service;
+
+import java.math.BigDecimal; import java.time.*; import java.util.*; import org.springframework.scheduling.annotation.Scheduled; import org.springframework.stereotype.Service; import org.springframework.transaction.annotation.Transactional; import com.parksmart.entity.*; import com.parksmart.repository.*;
+
+@Service public class AutoCloseService {
+    private final ParkingSessionRepository sessions; private final RateCardRepository rates; private final ClockService clock;
+    public AutoCloseService(ParkingSessionRepository s,RateCardRepository r,ClockService c){sessions=s;rates=r;clock=c;}
+    @Scheduled(cron="0 0 0 * * *") public void nightly(){runAutoClose(clock.now());}
+    @Transactional public List<Map<String,Object>> runAutoClose(Instant now){List<Map<String,Object>> closed=new ArrayList<>();for(ParkingSession session:sessions.findByCheckedOutAtIsNullAndCheckedInAtBefore(now.minus(24,java.time.temporal.ChronoUnit.HOURS))){RateCard rate=rates.findByGarageIdAndSpotType(session.getGarage().getId(),session.getSpot().getType()).orElse(null);BigDecimal first=rate==null?session.getGarage().getFirstHourRate():rate.getFirstHourRate();BigDecimal extra=rate==null?session.getGarage().getExtraHourRate():rate.getExtraHourRate();BigDecimal cap=rate==null?session.getGarage().getDailyCap():rate.getDailyCap();FeeCalculator.Breakdown fee=FeeCalculator.calculate(Duration.between(session.getCheckedInAt(),now).toMinutes(),first,extra,cap);session.setCheckedOutAt(now);session.setHoursBilled(fee.hoursBilled());session.setFee(fee.totalFee());session.setClosedBy(ParkingSession.ClosedBy.AUTO);session.setActiveSpotId(null);session.setActivePlateKey(null);sessions.save(session);Map<String,Object> row=new LinkedHashMap<>();row.put("sessionId",session.getId());row.put("plate",session.getPlate());row.put("spot",session.getSpot().getCode());row.put("checkedInAt",session.getCheckedInAt());row.put("checkedOutAt",now);row.put("hoursBilled",fee.hoursBilled());row.put("fee",fee.totalFee());closed.add(row);}return closed;}
+}

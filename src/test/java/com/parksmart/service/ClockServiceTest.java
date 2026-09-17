@@ -1,0 +1,3 @@
+package com.parksmart.service;
+import static org.junit.jupiter.api.Assertions.*; import java.time.*; import org.junit.jupiter.api.Test;
+class ClockServiceTest { @Test void canSetAdvanceAndReset(){ClockService clock=new ClockService();Instant fixed=Instant.parse("2026-09-18T00:00:00Z");assertEquals(fixed,clock.setNow(fixed));assertEquals(fixed.plusSeconds(5400),clock.advance(Duration.ofMinutes(90)));assertTrue(clock.isSimulated());clock.reset();assertFalse(clock.isSimulated());} }

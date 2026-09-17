@@ -1,0 +1,3 @@
+package com.parksmart.service;
+import static org.junit.jupiter.api.Assertions.*; import org.junit.jupiter.api.Test; import com.parksmart.entity.SpotType;
+class RateCardParserTest { @Test void cleansMessyRowsAndReportsBadData(){String csv=" TYPE , First Hour Rate , additional , MAX\n# ignore\n electric , INR 100 , $40/hr , 500\nsmall,₹50,Rs. 20,300\nstd,free,free,300\ncompact,60,25,300\nunknown,1,1,2\n";var r=RateCardParser.parse(csv);assertEquals(3,r.imported().size());assertEquals(1,r.rejected().size());assertTrue(r.warnings().get(0).contains("overridden"));assertTrue(r.imported().stream().anyMatch(x->x.spotType()==SpotType.EV));assertEquals(0,r.imported().stream().filter(x->x.spotType()==SpotType.STANDARD).findFirst().orElseThrow().firstHourRate().signum());} }

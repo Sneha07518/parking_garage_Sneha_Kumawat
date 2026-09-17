@@ -1,0 +1,6 @@
+package com.parksmart.controller;
+import java.util.Map; import org.springframework.security.core.Authentication; import org.springframework.web.bind.annotation.*; import org.springframework.validation.annotation.Validated; import jakarta.validation.Valid; import com.parksmart.dto.AuthDtos; import com.parksmart.service.AuthService;
+@RestController @RequestMapping("/api/auth") @Validated public class AuthController { private final AuthService service; public AuthController(AuthService s){service=s;}
+ @PostMapping("/register") public Map<String,Object> register(@Valid @RequestBody AuthDtos.Register r){var u=service.register(r);return Map.of("id",u.getId(),"name",u.getName(),"email",u.getEmail());}
+ @PostMapping("/login") public Map<String,String> login(@Valid @RequestBody AuthDtos.Login r){return Map.of("token",service.login(r));}
+ @GetMapping("/me") public Map<String,Object> me(Authentication a){var u=service.current(a.getName());return Map.of("id",u.getId(),"name",u.getName(),"email",u.getEmail());}}

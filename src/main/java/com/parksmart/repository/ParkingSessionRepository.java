@@ -1,0 +1,3 @@
+package com.parksmart.repository;
+import java.util.*; import org.springframework.data.jpa.repository.*; import org.springframework.data.jpa.domain.Specification; import com.parksmart.entity.ParkingSession;
+public interface ParkingSessionRepository extends JpaRepository<ParkingSession,Long>, JpaSpecificationExecutor<ParkingSession>{Optional<ParkingSession> findByGarageIdAndActivePlateKey(Long garageId,String key); List<ParkingSession> findByGarageIdAndActivePlateKeyIsNotNull(Long garageId); List<ParkingSession> findByCheckedOutAtIsNullAndCheckedInAtBefore(java.time.Instant before); boolean existsByGarageIdAndActiveSpotId(Long garageId,Long spotId);}

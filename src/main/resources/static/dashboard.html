@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard | ParkSmart</title><link rel="stylesheet" href="/css/style.css"></head>
+<body class="app">
+<header><a class="brand" href="/">Park<span>Smart</span></a><div class="header-actions"><span id="user"></span><button class="link-button" id="logout">Log out</button></div></header>
+<main class="dashboard">
+<div class="title-row"><div><p class="eyebrow">ATTENDANT DESK</p><h1>Good shift, <span id="name">there</span>.</h1></div><select id="garage"></select></div>
+<section class="stats" id="stats"></section>
+<section class="work-grid">
+<article class="panel"><p class="eyebrow">ARRIVAL</p><h2>Check in a vehicle</h2><form id="checkin"><label>Plate<input name="plate" placeholder="ABC 123" required></label><label>Vehicle<select name="vehicleType"><option>COMPACT</option><option>STANDARD</option><option>EV</option></select></label><label>Spot<select name="spotId"><option value="">Assign automatically</option></select></label><button class="button" type="submit">Check in</button></form><p class="result" id="checkinResult"></p></article>
+<article class="panel"><p class="eyebrow">DEPARTURE</p><h2>Check out a vehicle</h2><form id="checkout"><label>Plate<input name="plate" placeholder="ABC 123" required></label><button class="button" type="submit">Calculate and check out</button></form><div id="fee" class="fee"></div></article>
+</section>
+<section class="tools">
+<article class="panel"><p class="eyebrow">RATE CARD</p><h2>Import cleaned rates</h2><form id="rateForm"><textarea id="rateText" rows="5" placeholder="type,first,extra,cap&#10;EV,$100,$40,$500"></textarea><button class="button" type="submit">Import rates</button></form><div id="rateResult" class="result"></div><div class="table-wrap"><table><thead><tr><th>Type</th><th>First</th><th>Extra</th><th>Cap</th></tr></thead><tbody id="rates"></tbody></table></div></article>
+<article class="panel"><p class="eyebrow">VALET HAND-OFF</p><h2>Transfer a vehicle</h2><form id="transferForm"><label>Current plate<input name="fromPlate" required></label><label>New plate<input name="toPlate" required></label><label>Reason<input name="reason"></label><button class="button" type="submit">Transfer session</button></form><p id="transferResult" class="result"></p></article>
+<article class="panel"><p class="eyebrow">SIMULATED CLOCK</p><h2 id="clockNow">Loading time</h2><div class="clock-actions"><button class="button small" data-advance="1">+1h</button><button class="button small" data-advance="24">+24h</button><button class="button small" data-advance="25">+25h</button><button class="button small" id="clockReset">Reset</button></div><p id="autoClosed" class="muted"></p></article>
+</section>
+<section class="panel log"><div class="log-head"><div><p class="eyebrow">VISIT LOG</p><h2>Sessions</h2></div><div class="filters"><input id="search" placeholder="Search plate"><select id="status"><option value="">All visits</option><option>ACTIVE</option><option>COMPLETED</option></select><button class="button small" id="refresh">Refresh</button></div></div><div class="table-wrap"><table><thead><tr><th>Plate</th><th>Vehicle</th><th>Spot</th><th>Checked in</th><th>Status</th><th>Closed by</th><th>Fee</th></tr></thead><tbody id="sessions"></tbody></table></div><div class="pager"><button id="prev">←</button><span id="page">Page 1</span><button id="next">→</button></div></section>
+</main>
+<script src="/js/api.js"></script><script src="/js/dashboard.js"></script><script src="/js/dashboard-extra.js"></script>
+</body></html>

@@ -1,0 +1,3 @@
+package com.parksmart.repository;
+import java.util.*; import org.springframework.data.jpa.repository.*; import org.springframework.data.repository.query.Param; import com.parksmart.entity.*;
+public interface SpotRepository extends JpaRepository<Spot,Long>{List<Spot> findByGarageId(Long garageId); @Query("select s from Spot s where s.garage.id=:garageId and s.type=:type and not exists (select p.id from ParkingSession p where p.activeSpotId=s.id)") List<Spot> findFree(@Param("garageId") Long garageId,@Param("type") SpotType type);}
