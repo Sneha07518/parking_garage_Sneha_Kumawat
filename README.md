@@ -52,3 +52,17 @@ curl -X POST localhost:8080/api/garages/1/sessions/transfer -H "Authorization: B
 ## MySQL and debugging
 
 Uncomment the MySQL properties in `application.properties`, add the MySQL JDBC driver, and set credentials. Tests use `parksmart-test.db`, a separate SQLite file. Check the Spring Boot console and run `mvn test` when debugging.
+
+## /clock body
+`POST /clock` accepts one of: `{"now":"2026-09-18T00:00:00Z"}`, `{"advanceHours":25}`, `{"advanceMinutes":90}`. It sets the simulated time and runs the auto-close job.
+
+## UI
+- `/` – landing page
+- `/login.html`, `/register.html`
+- `/dashboard.html` – check-in/out, availability, search, log, rate card import, valet transfer, clock controls
+
+## Troubleshooting
+- **Port 8080 was already in use** → an old run is still alive: `fuser -k 8080/tcp`, then `mvn spring-boot:run` again.
+- **Server stops (exit code 143)** → the terminal running it was closed; keep that terminal open.
+- **Forwarded Codespaces URL doesn't open (DNS_PROBE_FINISHED_NXDOMAIN)** → local network DNS blocks `*.app.github.dev`. Use `gh codespace ports forward 8080:8080` on your machine and open `http://localhost:8080`, or switch networks.
+- **Check the server without a browser:** `curl -s -o /dev/null -w "%{http_code}" localhost:8080` → `200`.
